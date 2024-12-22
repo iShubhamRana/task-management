@@ -23,17 +23,19 @@ public class SecurityConfiguration {
     private UserDetailsManagerService userDetailsManagerService;
 
     /*
-    he SecurityFilterChain is configured to handle incoming requests,
+     The SecurityFilterChain is configured to handle incoming requests,
      but it doesn't directly execute code in the SecurityConfiguration class after the initial setup.
      The securityFilterChain method is called during the application startup to configure the security filters,
      not during each request. Therefore, placing a breakpoint in this method won't be triggered by a request.
     * */
     @Bean
-    public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //required to disable csrf
         http.csrf(customizer -> customizer.disable());
         //required for requests to be authenticated
-        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
+        http.authorizeHttpRequests(authorize ->
+                authorize.requestMatchers("/registerUser").permitAll());
+        http.authorizeHttpRequests(autorize -> autorize.anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
 
         return http.build();
