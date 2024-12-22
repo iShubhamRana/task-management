@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import com.shubham.taskManagement.service.UserDetailsManagerService;
@@ -45,7 +46,8 @@ public class SecurityConfiguration {
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsManagerService);
-        authProvider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        //Bcrypt picks up the user details and the reads the password to get information about salt and rounds.
+        authProvider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return authProvider;
     }
 
