@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.util.regex.Matcher;
 
 @NoArgsConstructor
@@ -25,7 +26,7 @@ public class UserModel {
 
     @Column(unique = true)
     @NotBlank(message = "Email is mandatory")
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$" , message = "Invalid email format")
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$", message = "Invalid email format")
     private String email;
 
     @Column(unique = true)
@@ -36,7 +37,7 @@ public class UserModel {
     @NotBlank(message = "Password is mandatory")
     private String password;
 
-    public  UserModel(String firstName, String lastName, String email, String phoneNumber, String password) {
+    public UserModel(String firstName, String lastName, String email, String phoneNumber, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

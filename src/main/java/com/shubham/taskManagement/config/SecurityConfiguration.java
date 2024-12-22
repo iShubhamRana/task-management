@@ -35,7 +35,7 @@ public class SecurityConfiguration {
         //required for requests to be authenticated
         http.authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/registerUser").permitAll());
-        http.authorizeHttpRequests(autorize -> autorize.anyRequest().authenticated());
+        http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
 
         return http.build();
