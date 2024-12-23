@@ -31,13 +31,16 @@ public class SecurityConfiguration {
     * */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //required to disable csrf
-        http.csrf(customizer -> customizer.disable());
+        //Enabling CSRF
+        http.csrf(Customizer.withDefaults());
         //required for requests to be authenticated
         http.authorizeHttpRequests(authorize ->
                 authorize.requestMatchers("/registerUser").permitAll());
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
+
+        //use stateless, don't want jsession id to stick around
+//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
