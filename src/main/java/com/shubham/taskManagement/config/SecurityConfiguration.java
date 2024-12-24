@@ -1,5 +1,6 @@
 package com.shubham.taskManagement.config;
 
+import com.shubham.taskManagement.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,14 +8,17 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import com.shubham.taskManagement.service.UserDetailsManagerService;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,16 +36,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         //Enabling CSRF
-        http.csrf(Customizer.withDefaults());
+        http.csrf(req-> req.disable());
         //required for requests to be authenticated
         http.authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/registerUser").permitAll());
+                authorize.requestMatchers("/registerUser", "/login").permitAll());
         http.authorizeHttpRequests(authorize -> authorize.anyRequest().authenticated());
         http.httpBasic(Customizer.withDefaults());
 
         //use stateless, don't want jsession id to stick around
-//        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -52,6 +57,11 @@ public class SecurityConfiguration {
         //Bcrypt picks up the user details and the reads the password to get information about salt and rounds.
         authProvider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return authProvider;
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
 

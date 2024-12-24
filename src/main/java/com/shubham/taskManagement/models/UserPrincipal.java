@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
+
 //we need this class so that AuthenticationObject can call allthese methods
 public class UserPrincipal implements UserDetails {
     private UserModel user;
