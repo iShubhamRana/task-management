@@ -27,6 +27,9 @@ public class SecurityConfiguration {
     @Autowired
     private UserDetailsManagerService userDetailsManagerService;
 
+    @Autowired
+    private JwtFilter jwtFilter;
+
     /*
      The SecurityFilterChain is configured to handle incoming requests,
      but it doesn't directly execute code in the SecurityConfiguration class after the initial setup.
@@ -46,7 +49,7 @@ public class SecurityConfiguration {
         //use stateless, don't want jsession id to stick around
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-//        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
