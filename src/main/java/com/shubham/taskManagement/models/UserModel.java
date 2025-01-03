@@ -12,13 +12,13 @@ import java.util.regex.Matcher;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usersTable")
 @Data
+@Table(name = "task_management_users")
 public class UserModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Long id;
 
     private String firstName;
 

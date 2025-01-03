@@ -1,6 +1,7 @@
 package com.shubham.taskManagement.controllers;
 
 import com.shubham.taskManagement.dao.UserRepo;
+import com.shubham.taskManagement.dto.ErrorResponse;
 import com.shubham.taskManagement.dto.LoginRequest;
 import com.shubham.taskManagement.models.UserModel;
 import com.shubham.taskManagement.service.JwtService;
@@ -33,9 +34,14 @@ public class AuthController {
     private JwtService jwtService;
 
     @PostMapping("/registerUser")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserModel user) {
-        userService.save(user);
-        return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+    public ResponseEntity<?> registerUser(@Valid @RequestBody UserModel user) {
+        try {
+            userService.save(user);
+            return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+        }catch (Exception e){
+            ErrorResponse errorResponse = new ErrorResponse("Error creating user");
+            return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/csrfToken")

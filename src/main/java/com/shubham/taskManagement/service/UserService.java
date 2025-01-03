@@ -17,4 +17,9 @@ public class UserService {
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
     }
+
+    public Boolean isValidUser(Long userId){
+        return userRepository.existsById(userId);
+    }
+
 }
